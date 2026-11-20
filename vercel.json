@@ -1,0 +1,10 @@
+{
+  "outputDirectory": "web",
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/((?!css/|js/|config\\.js|api/).*)",
+      "destination": "/index.html"
+    }
+  ]
+}

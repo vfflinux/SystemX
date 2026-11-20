@@ -72,13 +72,15 @@
     }, 3600);
   }
 
-  // Se aberto via file:// ou Live Server local (:5500 / :5501), aponta para o backend Java em localhost:8080;
-  // em produção (Render/Railway) ou rodando no próprio servidor Java, usa o mesmo domínio ('').
+  // Se houver URL externa configurada em web/config.js (ex: front na Vercel + back Java no Render), usa ela.
+  // Se aberto via file:// ou Live Server local (:5500 / :5501), aponta para localhost:8080.
+  // Caso contrário (rodando direto no servidor Java ou Render), usa o mesmo domínio ('').
+  const configuredApi = (window.SYSTEMX_API_URL || '').trim().replace(/\/+$/, '');
   const isLiveServer = (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost')
     && (window.location.port === '5500' || window.location.port === '5501');
-  const API_BASE = (window.location.protocol === 'file:' || isLiveServer)
+  const API_BASE = configuredApi || ((window.location.protocol === 'file:' || isLiveServer)
     ? 'http://localhost:8080'
-    : '';
+    : '');
 
   async function api(path, options = {}) {
     if (state.simulateNetworkError && !path.startsWith('/api/auth/')) {
@@ -105,6 +107,9 @@
     if (!resp.ok) {
       if (resp.status === 401 && !path.startsWith('/api/auth/login')) {
         handleForceLogout();
+      }
+      if (resp.status === 404 && !data.erro && path.startsWith('/api/')) {
+        throw new Error('Backend Java não encontrado neste domínio. Configure a URL do servidor Java (Render/Railway) em web/config.js ou acesse diretamente pela URL do Render.');
       }
       throw new Error(data.erro || `Erro na requisição (${resp.status}).`);
     }
