@@ -61,6 +61,12 @@ public class BibliotecaServer {
             String path = exchange.getRequestURI().getPath();
             Map<String, String> query = parseQuery(exchange.getRequestURI().getRawQuery());
 
+            // Healthcheck público para Render / Railway / Docker
+            if ("GET".equals(method) && "/api/health".equals(path)) {
+                sendJson(exchange, 200, Map.of("status", "ok", "service", "SystemX"));
+                return;
+            }
+
             // Endpoints públicos de autenticação (UC01)
             if ("POST".equals(method) && "/api/auth/login".equals(path)) {
                 Map<String, Object> body = readJsonBody(exchange);

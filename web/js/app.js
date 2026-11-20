@@ -72,8 +72,11 @@
     }, 3600);
   }
 
-  // Se aberto via Live Server (ex: :5500) ou file://, aponta automaticamente para o backend Java em localhost:8080
-  const API_BASE = (window.location.protocol === 'file:' || (window.location.port && window.location.port !== '8080'))
+  // Se aberto via file:// ou Live Server local (:5500 / :5501), aponta para o backend Java em localhost:8080;
+  // em produção (Render/Railway) ou rodando no próprio servidor Java, usa o mesmo domínio ('').
+  const isLiveServer = (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost')
+    && (window.location.port === '5500' || window.location.port === '5501');
+  const API_BASE = (window.location.protocol === 'file:' || isLiveServer)
     ? 'http://localhost:8080'
     : '';
 

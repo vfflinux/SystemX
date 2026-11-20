@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: systemx-biblioteca
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: ADMIN_NOME
+        value: Administrador
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_SENHA
+        sync: false
+      - key: FUNCIONARIO_NOME
+        value: Funcionário
+      - key: FUNCIONARIO_EMAIL
+        sync: false
+      - key: FUNCIONARIO_SENHA
+        sync: false
+      - key: VISUALIZADOR_NOME
+        value: Visitante (Visualização)
+      - key: VISUALIZADOR_EMAIL
+        sync: false
+      - key: VISUALIZADOR_SENHA
+        sync: false

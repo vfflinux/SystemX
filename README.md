@@ -36,6 +36,19 @@ As contas iniciais (Administrador, Funcionário e Somente Visualização) são c
 - **UC15 — Gerenciar condição de exemplares:** Separação de exemplares danificados, retorno ao acervo após reparo e trilha de supervisão pelo Administrador.
 - **UC16 — Gerenciar funcionários (`Configurações`):** Área exclusiva do Administrador para cadastrar, editar e desativar contas internas.
 
+## Deploy Online 100% em Java (Render ou Railway com Docker)
+
+O projeto inclui `Dockerfile`, `.dockerignore` e `render.yaml` prontos para hospedar o sistema inteiro (backend Java 21 + frontend HTML/CSS/JS) na nuvem:
+
+1. Faça `git push` para o seu repositório no GitHub.
+2. No **Render** (https://render.com) → **New +** → **Web Service** → conecte o repositório `SystemX` → selecione **Runtime: Docker** e plano **Free**.
+   - *(Ou no **Railway**: New Project → Deploy from GitHub Repo — ele detecta o `Dockerfile` automaticamente.)*
+3. Em **Environment Variables**, cadastre as variáveis do seu `.env`:
+   - `ADMIN_NOME`, `ADMIN_EMAIL`, `ADMIN_SENHA`
+   - `FUNCIONARIO_NOME`, `FUNCIONARIO_EMAIL`, `FUNCIONARIO_SENHA`
+   - `VISUALIZADOR_NOME`, `VISUALIZADOR_EMAIL`, `VISUALIZADOR_SENHA`
+4. Clique em **Deploy**. O servidor lê automaticamente a porta da variável `PORT` e responde em `/api/health`.
+
 ## Estrutura do Projeto
 
 - `src/br/com/systemx/biblioteca/` — Backend Java (modelos, repositório com persistência local em `data/systemx-db.json`, serviços com todas as regras de negócio e servidor HTTP REST).
