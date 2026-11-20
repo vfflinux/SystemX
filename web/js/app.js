@@ -72,15 +72,17 @@
     }, 3600);
   }
 
-  // Se houver URL externa configurada em web/config.js (ex: front na Vercel + back Java no Render), usa ela.
-  // Se aberto via file:// ou Live Server local (:5500 / :5501), aponta para localhost:8080.
-  // Caso contrário (rodando direto no servidor Java ou Render), usa o mesmo domínio ('').
+  // Resolução automática do servidor Java:
+  // - Local (localhost:8080): usa o próprio servidor local ('')
+  // - Local (Live Server :5500/:5501 ou file://): usa http://localhost:8080
+  // - Produção na Vercel: usa a URL configurada em web/config.js (Render)
+  // - Produção direto no Render: usa o mesmo domínio ('')
   const configuredApi = (window.SYSTEMX_API_URL || '').trim().replace(/\/+$/, '');
-  const isLiveServer = (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost')
-    && (window.location.port === '5500' || window.location.port === '5501');
-  const API_BASE = configuredApi || ((window.location.protocol === 'file:' || isLiveServer)
+  const isLocalHost = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
+  const isLiveServer = isLocalHost && (window.location.port === '5500' || window.location.port === '5501');
+  const API_BASE = window.location.protocol === 'file:' || isLiveServer
     ? 'http://localhost:8080'
-    : '');
+    : (isLocalHost ? '' : (configuredApi && configuredApi !== window.location.origin ? configuredApi : ''));
 
   async function api(path, options = {}) {
     if (state.simulateNetworkError && !path.startsWith('/api/auth/')) {
@@ -100,7 +102,11 @@
         body: options.body !== undefined ? JSON.stringify(options.body) : undefined,
       });
     } catch {
-      throw new Error('Não foi possível conectar ao servidor Java (http://localhost:8080). Inicie o backend com ./run.sh.');
+      const target = API_BASE || window.location.origin;
+      const hint = isLocalHost
+        ? 'Inicie o backend com ./run.sh.'
+        : 'Se o Render (plano gratuito) estiver hibernando, aguarde ~30 segundos e tente novamente.';
+      throw new Error(`Não foi possível conectar ao servidor Java (${target}). ${hint}`);
     }
 
     const data = await resp.json().catch(() => ({}));
