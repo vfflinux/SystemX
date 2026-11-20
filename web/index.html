@@ -1,0 +1,1589 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SystemX — Biblioteca Inteligente</title>
+    <link rel="stylesheet" href="./css/styles.css" />
+  </head>
+  <body>
+    <!-- ==================== TELA DE AUTENTICAÇÃO (UC01) ==================== -->
+    <section
+      id="login-screen"
+      class="login-screen"
+      aria-label="Autenticação no SystemX"
+    >
+      <div class="login-card">
+        <div class="login-brand-panel">
+          <div class="brand-lockup">
+            <div class="brand-mark" aria-hidden="true">
+              <span class="book-pill"></span>
+              <span class="book-pill"></span>
+            </div>
+            <div>
+              <div class="brand-name">SystemX</div>
+              <div class="brand-sub">Biblioteca Inteligente</div>
+            </div>
+          </div>
+
+          <div class="login-hero-copy">
+            <h1>Gestão de acervo, leitores e empréstimos em um só lugar.</h1>
+            <p>
+              Acesso autenticado para Funcionários e Administradores com
+              controle automático de prazos, disponibilidade quantitativa e
+              auditoria de exemplares.
+            </p>
+          </div>
+
+          <ul class="login-highlights">
+            <li>Limite automático de até 3 empréstimos simultâneos</li>
+            <li>Prazo padrão de 14 dias com 1 prorrogação presencial</li>
+            <li>Avaliação de condição na devolução e supervisão</li>
+          </ul>
+
+          <div class="login-squad-footer">
+            Projeto &amp; Engenharia de Software • Squad SystemX
+          </div>
+        </div>
+
+        <div class="login-form-panel">
+          <div class="login-form-header">
+            <span class="eyebrow">UC01 • Acesso Restrito</span>
+            <h2>Entrar no sistema</h2>
+            <p>Informe suas credenciais institucionais para continuar.</p>
+          </div>
+
+          <div
+            id="login-error"
+            class="inline-alert error hidden"
+            role="alert"
+          ></div>
+
+          <form id="login-form" class="stack-form" novalidate>
+            <div class="field">
+              <label for="login-email">E-mail institucional</label>
+              <input
+                id="login-email"
+                name="email"
+                type="email"
+                autocomplete="username"
+                placeholder="seu.email@gmail.com"
+                required
+              />
+            </div>
+            <div class="field">
+              <label for="login-password">Senha</label>
+              <input
+                id="login-password"
+                name="senha"
+                type="password"
+                autocomplete="current-password"
+                placeholder="Digite sua senha"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              class="btn btn-primary btn-full"
+              id="login-submit-btn"
+            >
+              Entrar no SystemX
+            </button>
+          </form>
+
+          <div class="quick-access-box">
+            <span class="quick-access-label"
+              >Acesso somente leitura (sem permissão para editar ou alterar dados):</span
+            >
+            <div class="quick-access-buttons">
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                id="fill-viewer-btn"
+              >
+                👁️ Entrar como Somente Visualização
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== APLICAÇÃO PRINCIPAL ==================== -->
+    <div id="app-shell" class="app-shell hidden">
+      <!-- SIDEBAR -->
+      <aside class="sidebar" aria-label="Navegação principal">
+        <div class="sidebar-top">
+          <div class="brand-lockup">
+            <div class="brand-mark" aria-hidden="true">
+              <span class="book-pill"></span>
+              <span class="book-pill"></span>
+            </div>
+            <div>
+              <div class="brand-name">SystemX</div>
+              <div class="brand-sub">Biblioteca Inteligente</div>
+            </div>
+          </div>
+
+          <nav class="sidebar-nav" aria-label="Seções do sistema">
+            <button type="button" class="nav-item active" data-tab="dashboard">
+              <span class="nav-icon" aria-hidden="true">
+                <svg viewBox="0 0 20 20" fill="currentColor">
+                  <rect x="3" y="3" width="6" height="6" rx="1.6" />
+                  <rect x="11" y="3" width="6" height="6" rx="1.6" />
+                  <rect x="3" y="11" width="6" height="6" rx="1.6" />
+                  <rect x="11" y="11" width="6" height="6" rx="1.6" />
+                </svg>
+              </span>
+              <span>Dashboard</span>
+            </button>
+            <button type="button" class="nav-item" data-tab="emprestimos">
+              <span class="nav-icon" aria-hidden="true">
+                <svg viewBox="0 0 20 20" fill="currentColor">
+                  <path
+                    d="M5 3.5A1.5 1.5 0 0 1 6.5 2h7A1.5 1.5 0 0 1 15 3.5v13a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 5 16.5v-13ZM7.5 6v1.5h5V6h-5Zm0 3.5V11h5V9.5h-5Zm0 3.5v1.5h3.5V13H7.5Z"
+                  />
+                </svg>
+              </span>
+              <span>Empréstimos</span>
+            </button>
+            <button type="button" class="nav-item" data-tab="livros">
+              <span class="nav-icon" aria-hidden="true">
+                <svg viewBox="0 0 20 20" fill="currentColor">
+                  <path
+                    d="M4 3.75A1.75 1.75 0 0 1 5.75 2h9.5A1.75 1.75 0 0 1 17 3.75v11.5A1.75 1.75 0 0 1 15.25 17H6a2 2 0 0 0-2 2V3.75Zm2.5 1.75v1.5h7v-1.5h-7Zm0 3.5v1.5h5V9h-5Z"
+                  />
+                </svg>
+              </span>
+              <span>Livros &amp; Acervo</span>
+            </button>
+            <button type="button" class="nav-item" data-tab="usuarios">
+              <span class="nav-icon" aria-hidden="true">
+                <svg viewBox="0 0 20 20" fill="currentColor">
+                  <path
+                    d="M10 9.5a3.25 3.25 0 1 0 0-6.5 3.25 3.25 0 0 0 0 6.5Zm-6 7.25C4 13.85 6.68 12 10 12s6 1.85 6 4.75c0 .41-.34.75-.75.75H4.75a.75.75 0 0 1-.75-.75Z"
+                  />
+                </svg>
+              </span>
+              <span>Usuários</span>
+            </button>
+            <button type="button" class="nav-item" data-tab="configuracoes">
+              <span class="nav-icon" aria-hidden="true">
+                <svg viewBox="0 0 20 20" fill="currentColor">
+                  <path
+                    fill-rule="evenodd"
+                    d="M8.4 2.6a1.65 1.65 0 0 1 3.2 0l.18 1.04a5.9 5.9 0 0 1 1.38.57l.87-.62a1.65 1.65 0 0 1 2.26 2.26l-.62.87c.25.43.44.9.57 1.38l1.04.18a1.65 1.65 0 0 1 0 3.2l-1.04.18a5.9 5.9 0 0 1-.57 1.38l.62.87a1.65 1.65 0 0 1-2.26 2.26l-.87-.62a5.9 5.9 0 0 1-1.38.57l-.18 1.04a1.65 1.65 0 0 1-3.2 0l-.18-1.04a5.9 5.9 0 0 1-1.38-.57l-.87.62a1.65 1.65 0 0 1-2.26-2.26l.62-.87a5.9 5.9 0 0 1-.57-1.38l-1.04-.18a1.65 1.65 0 0 1 0-3.2l1.04-.18c.13-.48.32-.95.57-1.38l-.62-.87a1.65 1.65 0 0 1 2.26-2.26l.87.62c.43-.25.9-.44 1.38-.57L8.4 2.6ZM10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </span>
+              <span>Configurações</span>
+            </button>
+          </nav>
+        </div>
+
+        <div class="sidebar-bottom">
+          <div class="rbac-card">
+            <label for="rbac-select" class="rbac-label"
+              >CARGO ATUAL (RBAC)</label
+            >
+            <select
+              id="rbac-select"
+              class="rbac-select"
+              aria-label="Alternar cargo RBAC"
+            >
+              <option value="ADMINISTRADOR">Administrador (Total)</option>
+              <option value="FUNCIONARIO">Funcionário (Operacional)</option>
+              <option value="VISUALIZADOR">Somente Visualização</option>
+            </select>
+            <div class="rbac-shortcuts">Atalhos: Ctrl+K Busca • Alt+N Novo</div>
+          </div>
+
+          <div class="sidebar-user">
+            <div class="avatar-circle" id="sidebar-user-avatar">AD</div>
+            <div class="sidebar-user-meta">
+              <div class="sidebar-user-name" id="sidebar-user-name">
+                Equipe Biblioteca
+              </div>
+              <div class="sidebar-user-status">
+                <span id="sidebar-user-role">Administrador</span> •
+                <span class="online-text">Online</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- MAIN COLUMN -->
+      <div class="main-column">
+        <!-- TOPBAR -->
+        <header class="topbar">
+          <div class="topbar-left">
+            <button
+              type="button"
+              class="mobile-menu-btn"
+              id="mobile-menu-btn"
+              aria-label="Abrir menu"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+            <div class="global-search-wrap">
+              <svg
+                class="search-icon"
+                viewBox="0 0 20 20"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                aria-hidden="true"
+              >
+                <circle cx="9" cy="9" r="6" />
+                <path d="m14 14 4 4" stroke-linecap="round" />
+              </svg>
+              <input
+                id="global-search-input"
+                type="search"
+                placeholder="Buscar livro, autor, CPF ou código..."
+                autocomplete="off"
+              />
+              <kbd class="kbd-hint">Ctrl K</kbd>
+              <div
+                id="global-search-results"
+                class="search-dropdown hidden"
+                role="listbox"
+              ></div>
+            </div>
+          </div>
+
+          <div class="topbar-right">
+            <button
+              type="button"
+              class="btn btn-simulate"
+              id="simulate-error-btn"
+              title="Alternar simulação de erro de rede"
+            >
+              <span aria-hidden="true">⚡</span> Simular Erro de Rede
+            </button>
+            <button type="button" class="btn btn-primary" id="new-loan-btn">
+              + Novo Empréstimo (Alt N)
+            </button>
+
+            <div class="popover-anchor">
+              <button
+                type="button"
+                class="icon-circle-btn"
+                id="notif-btn"
+                aria-label="Notificações"
+              >
+                <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path
+                    d="M10 2.5a5 5 0 0 0-5 5v2.67c0 .7-.25 1.37-.71 1.9l-.84.96a.75.75 0 0 0 .56 1.24h11.98a.75.75 0 0 0 .56-1.24l-.84-.96a2.9 2.9 0 0 1-.71-1.9V7.5a5 5 0 0 0-5-5ZM8.2 15.75a1.8 1.8 0 0 0 3.6 0H8.2Z"
+                  />
+                </svg>
+                <span id="notif-dot" class="notif-dot hidden"></span>
+              </button>
+              <div id="notif-popover" class="dropdown-panel hidden">
+                <div class="dropdown-panel-header">
+                  <strong>Notificações &amp; Pendências</strong>
+                  <span id="notif-count-badge" class="count-pill">0</span>
+                </div>
+                <div id="notif-list" class="notif-list"></div>
+              </div>
+            </div>
+
+            <div class="popover-anchor">
+              <button
+                type="button"
+                class="profile-chip"
+                id="profile-menu-btn"
+                aria-label="Menu do usuário"
+              >
+                <span class="profile-chip-avatar" id="topbar-user-avatar"
+                  >AD</span
+                >
+                <span class="profile-chip-text">
+                  <strong id="topbar-user-name">Administrador</strong>
+                  <small id="topbar-user-role">Admin ▾</small>
+                </span>
+              </button>
+              <div
+                id="profile-popover"
+                class="dropdown-panel profile-dropdown hidden"
+              >
+                <div class="profile-dropdown-head">
+                  <strong id="profile-pop-name">Equipe Biblioteca</strong>
+                  <small id="profile-pop-email">admin@systemx.com</small>
+                </div>
+                <button
+                  type="button"
+                  class="dropdown-action"
+                  id="go-config-profile-btn"
+                >
+                  Configurações &amp; Conta
+                </button>
+                <button
+                  type="button"
+                  class="dropdown-action danger"
+                  id="logout-btn"
+                >
+                  Sair do SystemX
+                </button>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- BANNER DE ERRO DE REDE SIMULADO -->
+        <div
+          id="network-error-banner"
+          class="network-banner hidden"
+          role="alert"
+        >
+          <div>
+            <strong>⚡ Modo de Erro de Rede Ativo:</strong>
+            As requisições ao servidor Java estão falhando propositalmente para
+            validação de resiliência da interface.
+          </div>
+          <button
+            type="button"
+            class="btn btn-sm btn-ghost-light"
+            id="disable-error-btn"
+          >
+            Restaurar Conexão
+          </button>
+        </div>
+
+        <!-- BANNER SOMENTE VISUALIZAÇÃO -->
+        <div
+          id="readonly-banner"
+          class="readonly-banner hidden"
+          role="status"
+        >
+          <div>
+            <strong>👁️ Modo Somente Visualização:</strong>
+            Você pode consultar o dashboard, acervo, leitores, histórico e recibos, sem permissão para criar, editar ou alterar registros.
+          </div>
+        </div>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="content-area">
+          <!-- ==================== ABA 1: DASHBOARD (IDÊNTICO AO DESIGN PNG) ==================== -->
+          <section
+            id="tab-dashboard"
+            class="tab-view active"
+            aria-labelledby="dash-title"
+          >
+            <!-- Welcome Hero Banner -->
+            <div class="welcome-banner">
+              <div class="welcome-copy">
+                <h1 id="dash-title">Bem-vindo ao SystemX!</h1>
+                <p>
+                  Gerencie sua biblioteca de forma simples, rápida e eficiente.
+                </p>
+              </div>
+              <div class="welcome-illustration" aria-hidden="true">
+                <svg
+                  viewBox="0 0 180 96"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect
+                    x="6"
+                    y="4"
+                    width="168"
+                    height="88"
+                    rx="44"
+                    fill="#DCD7C9"
+                    fill-opacity="0.45"
+                  />
+                  <!-- Livro superior (Bronze/Terracota #A27B5C) -->
+                  <rect
+                    x="44"
+                    y="23"
+                    width="90"
+                    height="24"
+                    rx="7"
+                    fill="#A27B5C"
+                  />
+                  <rect
+                    x="49"
+                    y="34"
+                    width="80"
+                    height="9"
+                    rx="4"
+                    fill="#FBF9F4"
+                  />
+                  <!-- Livro inferior (Charcoal #2C3639 com páginas claras) -->
+                  <rect
+                    x="38"
+                    y="49"
+                    width="102"
+                    height="25"
+                    rx="7"
+                    fill="#2C3639"
+                  />
+                  <rect
+                    x="44"
+                    y="54"
+                    width="90"
+                    height="15"
+                    rx="4"
+                    fill="#FFFFFF"
+                  />
+                  <rect
+                    x="52"
+                    y="59"
+                    width="56"
+                    height="3"
+                    rx="1.5"
+                    fill="#DCD7C9"
+                  />
+                  <!-- Marcador de página -->
+                  <path d="M114 49h10v16l-5-3.5-5 3.5V49Z" fill="#B84A39" />
+                </svg>
+              </div>
+            </div>
+
+            <!-- 4 KPI Stat Cards -->
+            <div class="kpi-grid">
+              <article class="kpi-card clickable" data-kpi-nav="livros">
+                <div class="kpi-icon-box kpi-bronze">
+                  <span class="kpi-dot-shape"></span>
+                </div>
+                <div class="kpi-label">Total de Livros</div>
+                <div class="kpi-value" id="kpi-total-livros">0</div>
+                <div class="kpi-trend positive" id="kpi-livros-sub">
+                  ↑ 12% este mês
+                </div>
+              </article>
+
+              <article class="kpi-card clickable" data-kpi-nav="usuarios">
+                <div class="kpi-icon-box kpi-green">
+                  <span class="kpi-dot-shape"></span>
+                </div>
+                <div class="kpi-label">Usuários Cadastrados</div>
+                <div class="kpi-value" id="kpi-usuarios">0</div>
+                <div class="kpi-trend positive" id="kpi-usuarios-sub">
+                  ↑ 8% este mês
+                </div>
+              </article>
+
+              <article class="kpi-card clickable" data-kpi-nav="emprestimos">
+                <div class="kpi-icon-box kpi-slate">
+                  <span class="kpi-dot-shape"></span>
+                </div>
+                <div class="kpi-label">Empréstimos Ativos</div>
+                <div class="kpi-value" id="kpi-ativos">0</div>
+                <div class="kpi-trend positive" id="kpi-ativos-sub">
+                  ↑ 5% este mês
+                </div>
+              </article>
+
+              <article class="kpi-card clickable" data-kpi-nav="atrasados">
+                <div class="kpi-icon-box kpi-red">
+                  <span class="kpi-dot-shape"></span>
+                </div>
+                <div class="kpi-label">Livros Atrasados</div>
+                <div class="kpi-value" id="kpi-atrasados">0</div>
+                <div class="kpi-trend negative" id="kpi-atrasados-sub">
+                  ↓ 50% este mês
+                </div>
+              </article>
+            </div>
+
+            <!-- Grid inferior 2 colunas: Empréstimos Recentes + Gráfico/Promo -->
+            <div class="dashboard-bottom-grid">
+              <!-- Esquerda: Empréstimos recentes -->
+              <div class="panel-card">
+                <div class="panel-header wrap-header">
+                  <div class="panel-title-group">
+                    <h2>Empréstimos recentes</h2>
+                    <div class="filter-pills" id="dash-loan-filters">
+                      <button
+                        type="button"
+                        class="pill-btn active"
+                        data-dash-filter="todos"
+                      >
+                        Todos
+                      </button>
+                      <button
+                        type="button"
+                        class="pill-btn"
+                        data-dash-filter="no_prazo"
+                      >
+                        No Prazo
+                      </button>
+                      <button
+                        type="button"
+                        class="pill-btn"
+                        data-dash-filter="prox_vencimento"
+                      >
+                        Próx. Vencimento
+                      </button>
+                      <button
+                        type="button"
+                        class="pill-btn"
+                        data-dash-filter="atrasados"
+                      >
+                        Atrasados
+                      </button>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    class="text-link-btn"
+                    id="dash-see-all-btn"
+                  >
+                    Ver todos →
+                  </button>
+                </div>
+
+                <div class="table-responsive">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Livro</th>
+                        <th>Usuário / Perfil</th>
+                        <th>Data de Empréstimo</th>
+                        <th>Status</th>
+                        <th class="align-right">Ações</th>
+                      </tr>
+                    </thead>
+                    <tbody id="dash-recent-tbody"></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Direita: Gráfico + Card Promo -->
+              <div class="dashboard-right-col">
+                <div class="panel-card">
+                  <div class="panel-header compact">
+                    <h2>Livros mais emprestados</h2>
+                  </div>
+                  <div
+                    class="bar-chart-wrap"
+                    id="top-books-chart"
+                    aria-label="Gráfico de livros mais emprestados"
+                  ></div>
+                </div>
+
+                <div class="promo-card">
+                  <div class="promo-icon-box" aria-hidden="true">
+                    <span class="book-pill"></span>
+                    <span class="book-pill"></span>
+                  </div>
+                  <div class="promo-copy">
+                    <h3>Mais organização, mais leitura!</h3>
+                    <p>
+                      O SystemX ajuda a sua biblioteca a funcionar melhor com
+                      cálculo automático de prazos e gestão de exemplares.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ==================== ABA 2: EMPRÉSTIMOS (UC10–UC14) ==================== -->
+          <section
+            id="tab-emprestimos"
+            class="tab-view"
+            aria-labelledby="emp-title"
+          >
+            <div class="page-head">
+              <div>
+                <h1 id="emp-title">Empréstimos &amp; Devoluções</h1>
+                <p>
+                  Controle completo de retiradas, prazos de 14 dias, prorrogação
+                  única (UC13), cancelamentos (UC11) e devoluções (UC12).
+                </p>
+              </div>
+              <button type="button" class="btn btn-primary" id="emp-new-btn">
+                + Novo Empréstimo
+              </button>
+            </div>
+
+            <div class="panel-card">
+              <div class="toolbar-row">
+                <div class="filter-pills" id="emp-status-filters">
+                  <button
+                    type="button"
+                    class="pill-btn active"
+                    data-emp-filter="todos"
+                  >
+                    Todos
+                  </button>
+                  <button
+                    type="button"
+                    class="pill-btn"
+                    data-emp-filter="no_prazo"
+                  >
+                    Em dia
+                  </button>
+                  <button
+                    type="button"
+                    class="pill-btn"
+                    data-emp-filter="aguardando"
+                  >
+                    Aguardando Retirada
+                  </button>
+                  <button
+                    type="button"
+                    class="pill-btn"
+                    data-emp-filter="prox_vencimento"
+                  >
+                    Próx. Vencimento
+                  </button>
+                  <button
+                    type="button"
+                    class="pill-btn"
+                    data-emp-filter="atrasados"
+                  >
+                    Atrasados
+                  </button>
+                  <button
+                    type="button"
+                    class="pill-btn"
+                    data-emp-filter="devolvidos"
+                  >
+                    Devolvidos
+                  </button>
+                  <button
+                    type="button"
+                    class="pill-btn"
+                    data-emp-filter="cancelados"
+                  >
+                    Cancelados
+                  </button>
+                </div>
+                <div class="inline-search">
+                  <input
+                    type="search"
+                    id="emp-search-input"
+                    placeholder="Filtrar por código, livro, leitor ou CPF..."
+                  />
+                </div>
+              </div>
+
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Livro / Código</th>
+                      <th>Leitor / CPF</th>
+                      <th>Datas &amp; Prazo</th>
+                      <th>Prorrogação</th>
+                      <th>Status</th>
+                      <th class="align-right">Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody id="emp-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- ==================== ABA 3: LIVROS & ACERVO (UC06–UC09, UC15) ==================== -->
+          <section
+            id="tab-livros"
+            class="tab-view"
+            aria-labelledby="livros-title"
+          >
+            <div class="page-head">
+              <div>
+                <h1 id="livros-title">Livros &amp; Acervo</h1>
+                <p>
+                  Cadastro de títulos, controle quantitativo de exemplares
+                  (disponíveis, emprestados e danificados) e avaliação de
+                  condição (UC15).
+                </p>
+              </div>
+              <button type="button" class="btn btn-primary" id="book-new-btn">
+                + Cadastrar Livro
+              </button>
+            </div>
+
+            <div class="mini-kpi-strip" id="livros-summary-strip"></div>
+
+            <div class="panel-card">
+              <div class="toolbar-row">
+                <div class="filter-pills" id="book-status-filters">
+                  <button
+                    type="button"
+                    class="pill-btn active"
+                    data-book-filter="todos"
+                  >
+                    Todos
+                  </button>
+                  <button
+                    type="button"
+                    class="pill-btn"
+                    data-book-filter="disponiveis"
+                  >
+                    Disponíveis
+                  </button>
+                  <button
+                    type="button"
+                    class="pill-btn"
+                    data-book-filter="danificados"
+                  >
+                    Com Danificados
+                  </button>
+                  <button
+                    type="button"
+                    class="pill-btn"
+                    data-book-filter="desativados"
+                  >
+                    Desativados
+                  </button>
+                </div>
+                <div class="toolbar-inputs">
+                  <select
+                    id="book-category-filter"
+                    class="select-sm"
+                    aria-label="Filtrar categoria"
+                  >
+                    <option value="todas">Todas as categorias</option>
+                  </select>
+                  <input
+                    type="search"
+                    id="book-search-input"
+                    placeholder="Buscar título, autor, ISBN..."
+                  />
+                </div>
+              </div>
+
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Obra / ISBN</th>
+                      <th>Editora / Ano</th>
+                      <th>Categoria</th>
+                      <th>Exemplares (Quantitativo)</th>
+                      <th>Situação</th>
+                      <th class="align-right">Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody id="books-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- ==================== ABA 4: USUÁRIOS / LEITORES (UC02–UC05) ==================== -->
+          <section
+            id="tab-usuarios"
+            class="tab-view"
+            aria-labelledby="users-title"
+          >
+            <div class="page-head">
+              <div>
+                <h1 id="users-title">Usuários (Leitores)</h1>
+                <p>
+                  Cadastro e acompanhamento de leitores. Leitores não acessam o
+                  sistema diretamente; desativação preserva todo o histórico
+                  (UC05).
+                </p>
+              </div>
+              <button type="button" class="btn btn-primary" id="reader-new-btn">
+                + Cadastrar Leitor
+              </button>
+            </div>
+
+            <div class="mini-kpi-strip" id="readers-summary-strip"></div>
+
+            <div class="panel-card">
+              <div class="toolbar-row">
+                <div class="filter-pills" id="reader-status-filters">
+                  <button
+                    type="button"
+                    class="pill-btn active"
+                    data-reader-filter="todos"
+                  >
+                    Todos
+                  </button>
+                  <button
+                    type="button"
+                    class="pill-btn"
+                    data-reader-filter="ativos"
+                  >
+                    Ativos
+                  </button>
+                  <button
+                    type="button"
+                    class="pill-btn"
+                    data-reader-filter="pendencia"
+                  >
+                    Com Pendência
+                  </button>
+                  <button
+                    type="button"
+                    class="pill-btn"
+                    data-reader-filter="desativados"
+                  >
+                    Desativados
+                  </button>
+                </div>
+                <div class="inline-search">
+                  <input
+                    type="search"
+                    id="reader-search-input"
+                    placeholder="Buscar nome, CPF, telefone ou e-mail..."
+                  />
+                </div>
+              </div>
+
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Leitor / Perfil</th>
+                      <th>CPF &amp; Contato</th>
+                      <th>Empréstimos</th>
+                      <th>Elegibilidade</th>
+                      <th class="align-right">Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody id="readers-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- ==================== ABA 5: CONFIGURAÇÕES (UC16 + UC15 SUPERVISÃO + REGRAS) ==================== -->
+          <section
+            id="tab-configuracoes"
+            class="tab-view"
+            aria-labelledby="config-title"
+          >
+            <div class="page-head">
+              <div>
+                <h1 id="config-title">Configurações &amp; Administração</h1>
+                <p>
+                  Gestão de contas de funcionários (UC16), supervisão
+                  administrativa de exemplares danificados (UC15) e parâmetros
+                  do SystemX.
+                </p>
+              </div>
+              <button
+                type="button"
+                class="btn btn-primary hidden"
+                id="staff-new-btn"
+              >
+                + Cadastrar Funcionário
+              </button>
+            </div>
+
+            <div class="subtab-bar" id="config-subtabs">
+              <button
+                type="button"
+                class="pill-btn active"
+                data-config-sub="funcionarios"
+              >
+                Funcionários (UC16)
+              </button>
+              <button
+                type="button"
+                class="pill-btn"
+                data-config-sub="supervisao"
+              >
+                Supervisão de Exemplares (UC15)
+              </button>
+              <button type="button" class="pill-btn" data-config-sub="regras">
+                Regras de Negócio &amp; Projeto
+              </button>
+            </div>
+
+            <!-- Sub-aba Funcionários -->
+            <div id="config-panel-funcionarios" class="config-subpanel active">
+              <div id="staff-rbac-lock" class="rbac-lock-card hidden">
+                <div class="rbac-lock-icon">🔒</div>
+                <h3>Área exclusiva do Administrador (UC16)</h3>
+                <p>
+                  Você está autenticado como <strong>Funcionário</strong>. O
+                  cadastro, edição e desativação de contas internas requer
+                  perfil de <strong>Administrador</strong>.
+                </p>
+              </div>
+
+              <div id="staff-panel-card" class="panel-card">
+                <div class="panel-header compact">
+                  <h2>Contas de Funcionários e Administradores</h2>
+                </div>
+                <div class="table-responsive">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Funcionário</th>
+                        <th>Matrícula</th>
+                        <th>E-mail</th>
+                        <th>Perfil (RBAC)</th>
+                        <th>Status</th>
+                        <th class="align-right">Ações</th>
+                      </tr>
+                    </thead>
+                    <tbody id="staff-tbody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sub-aba Supervisão de Exemplares -->
+            <div id="config-panel-supervisao" class="config-subpanel">
+              <div class="panel-card">
+                <div class="panel-header compact">
+                  <div>
+                    <h2>Auditoria e Supervisão de Exemplares (UC15)</h2>
+                    <p class="panel-subtitle">
+                      Ocorrências de avaria na devolução, separação para
+                      manutenção e retorno ao acervo disponível.
+                    </p>
+                  </div>
+                </div>
+                <div class="table-responsive">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Data/Hora</th>
+                        <th>Livro</th>
+                        <th>Ocorrência</th>
+                        <th>Observação &amp; Responsável</th>
+                        <th>Supervisão Admin</th>
+                        <th class="align-right">Ação</th>
+                      </tr>
+                    </thead>
+                    <tbody id="condition-log-tbody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sub-aba Regras & Projeto -->
+            <div id="config-panel-regras" class="config-subpanel">
+              <div class="rules-grid">
+                <div class="panel-card">
+                  <h2>Regras de Negócio Ativas</h2>
+                  <ul class="rules-list">
+                    <li>
+                      <strong>Autenticação obrigatória (UC01):</strong> Acesso
+                      exclusivo para Funcionários e Administradores. Leitores
+                      não acessam o sistema.
+                    </li>
+                    <li>
+                      <strong>Limite simultâneo (UC10):</strong> Cada leitor
+                      pode manter até
+                      <strong>3 empréstimos simultâneos</strong>.
+                    </li>
+                    <li>
+                      <strong>Prazo padrão:</strong>
+                      <strong>14 dias</strong> corridos a partir da retirada.
+                    </li>
+                    <li>
+                      <strong>Prorrogação única (UC13):</strong> Apenas 1
+                      extensão de <strong>+14 dias</strong>, solicitada
+                      presencialmente <em>antes</em> do vencimento.
+                    </li>
+                    <li>
+                      <strong>Bloqueio por atraso:</strong> Empréstimos vencidos
+                      mudam automaticamente para <strong>Atrasado</strong>,
+                      impedindo novos empréstimos.
+                    </li>
+                    <li>
+                      <strong>Cancelamento (UC11):</strong> Permitido somente
+                      antes da retirada física do exemplar (status
+                      <em>Aguardando Retirada</em>).
+                    </li>
+                    <li>
+                      <strong>Condição na devolução (UC12 / UC15):</strong>
+                      Exemplares danificados são separados da quantidade
+                      disponível até reparo e supervisão.
+                    </li>
+                    <li>
+                      <strong>Desativação segura (UC05 / UC09):</strong>
+                      Leitores e livros só podem ser desativados sem empréstimos
+                      ativos ou pendências; o histórico é preservado.
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="panel-card">
+                  <h2>Squad SystemX &amp; Arquitetura</h2>
+                  <div class="info-kv-list">
+                    <div>
+                      <span>Sistema</span
+                      ><strong>SystemX — Gestão de Biblioteca</strong>
+                    </div>
+                    <div>
+                      <span>Product Owner</span
+                      ><strong>Matheus Cavalcanti</strong>
+                    </div>
+                    <div>
+                      <span>Scrum Master</span><strong>João Caldeira</strong>
+                    </div>
+                    <div>
+                      <span>Front-end</span><strong>Vinícius Felix</strong>
+                    </div>
+                    <div>
+                      <span>Back-end</span
+                      ><strong>Henrique Ferreira &amp; Lucas Silva</strong>
+                    </div>
+                    <div>
+                      <span>Stack Web</span
+                      ><strong>Java 21 HTTP Server + HTML5 + CSS3 + JS</strong>
+                    </div>
+                    <div>
+                      <span>Banco de Dados</span
+                      ><strong
+                        >Persistência JSON local + Script MySQL
+                        (database/schema.sql)</strong
+                      >
+                    </div>
+                  </div>
+                  <div id="admin-reset-box" class="admin-reset-box hidden">
+                    <p>
+                      Deseja restaurar os livros, leitores e empréstimos
+                      iniciais de demonstração?
+                    </p>
+                    <button
+                      type="button"
+                      class="btn btn-outline-danger"
+                      id="reset-demo-btn"
+                    >
+                      Restaurar Base de Demonstração
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <!-- ==================== MODAIS NATIVOS (<dialog>) ==================== -->
+    <!-- Modal: Novo Empréstimo (UC10) -->
+    <dialog id="modal-new-loan" class="sx-dialog">
+      <form id="form-new-loan" class="dialog-card" method="dialog">
+        <div class="dialog-head">
+          <div>
+            <span class="eyebrow">UC10 • Empréstimo</span>
+            <h3>Registrar Novo Empréstimo</h3>
+          </div>
+          <button type="button" class="dialog-close" data-close-dialog>
+            &times;
+          </button>
+        </div>
+        <div class="dialog-body stack-form">
+          <div class="field">
+            <label for="loan-leitor-select">Leitor</label>
+            <select id="loan-leitor-select" required></select>
+            <small id="loan-leitor-hint" class="field-hint"></small>
+          </div>
+          <div class="field">
+            <label for="loan-livro-select">Livro disponível no acervo</label>
+            <select id="loan-livro-select" required></select>
+          </div>
+          <div class="field">
+            <label>Modalidade de retirada</label>
+            <div class="radio-cards">
+              <label class="radio-card">
+                <input
+                  type="radio"
+                  name="retiradaImediata"
+                  value="true"
+                  checked
+                />
+                <span>
+                  <strong>Retirada imediata no balcão</strong>
+                  <small
+                    >Inicia contagem de 14 dias agora (status: Em dia).</small
+                  >
+                </span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="retiradaImediata" value="false" />
+                <span>
+                  <strong>Registrar antes da retirada</strong>
+                  <small
+                    >Status: Aguardando Retirada — permite cancelamento
+                    (UC11).</small
+                  >
+                </span>
+              </label>
+            </div>
+          </div>
+          <div class="rule-callout">
+            Prazo padrão: <strong>14 dias</strong> • Limite:
+            <strong>3 empréstimos simultâneos</strong> • Leitores com atraso são
+            bloqueados automaticamente.
+          </div>
+        </div>
+        <div class="dialog-foot">
+          <button type="button" class="btn btn-ghost" data-close-dialog>
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary">
+            Confirmar Empréstimo
+          </button>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- Modal: Registrar Devolução (UC12) -->
+    <dialog id="modal-return-loan" class="sx-dialog">
+      <form id="form-return-loan" class="dialog-card" method="dialog">
+        <div class="dialog-head">
+          <div>
+            <span class="eyebrow">UC12 • Devolução &amp; Avaliação</span>
+            <h3>Registrar Devolução de Livro</h3>
+          </div>
+          <button type="button" class="dialog-close" data-close-dialog>
+            &times;
+          </button>
+        </div>
+        <div class="dialog-body stack-form">
+          <input type="hidden" id="return-loan-id" />
+          <div id="return-loan-summary" class="summary-box"></div>
+          <div class="field">
+            <label>Condição observada no exemplar (obrigatório)</label>
+            <div class="radio-cards">
+              <label class="radio-card">
+                <input
+                  type="radio"
+                  name="condicaoDevolucao"
+                  value="BOAS_CONDICOES"
+                  checked
+                />
+                <span>
+                  <strong>Boas condições</strong>
+                  <small
+                    >Retorna imediatamente à quantidade disponível para
+                    empréstimo.</small
+                  >
+                </span>
+              </label>
+              <label class="radio-card warning">
+                <input
+                  type="radio"
+                  name="condicaoDevolucao"
+                  value="DANIFICADO"
+                />
+                <span>
+                  <strong>Exemplar danificado</strong>
+                  <small
+                    >Separado do acervo disponível e enviado para
+                    manutenção/supervisão (UC15).</small
+                  >
+                </span>
+              </label>
+            </div>
+          </div>
+          <div class="field">
+            <label for="return-observacao">Observações da avaliação</label>
+            <textarea
+              id="return-observacao"
+              rows="3"
+              placeholder="Ex: Capa intacta, sem rabiscos ou avarias..."
+            ></textarea>
+          </div>
+        </div>
+        <div class="dialog-foot">
+          <button type="button" class="btn btn-ghost" data-close-dialog>
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary">
+            Concluir Devolução
+          </button>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- Modal: Recibo de Empréstimo / Devolução -->
+    <dialog id="modal-receipt" class="sx-dialog">
+      <div class="dialog-card">
+        <div class="dialog-head">
+          <div>
+            <span class="eyebrow">Comprovante SystemX</span>
+            <h3>Recibo de Movimentação</h3>
+          </div>
+          <button type="button" class="dialog-close" data-close-dialog>
+            &times;
+          </button>
+        </div>
+        <div class="dialog-body" id="receipt-content"></div>
+        <div class="dialog-foot">
+          <button type="button" class="btn btn-ghost" data-close-dialog>
+            Fechar
+          </button>
+          <button type="button" class="btn btn-primary" id="print-receipt-btn">
+            Imprimir Comprovante
+          </button>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- Modal: Cadastrar / Editar Livro (UC06, UC07) -->
+    <dialog id="modal-book" class="sx-dialog">
+      <form id="form-book" class="dialog-card" method="dialog">
+        <div class="dialog-head">
+          <div>
+            <span class="eyebrow">UC06 / UC07 • Acervo</span>
+            <h3 id="modal-book-title">Cadastrar Livro</h3>
+          </div>
+          <button type="button" class="dialog-close" data-close-dialog>
+            &times;
+          </button>
+        </div>
+        <div class="dialog-body form-grid-2">
+          <input type="hidden" id="book-id" />
+          <div class="field span-2">
+            <label for="book-titulo">Título</label>
+            <input
+              id="book-titulo"
+              required
+              placeholder="Ex: Clean Architecture"
+            />
+          </div>
+          <div class="field">
+            <label for="book-autor">Autor</label>
+            <input
+              id="book-autor"
+              required
+              placeholder="Ex: Robert C. Martin"
+            />
+          </div>
+          <div class="field">
+            <label for="book-editora">Editora</label>
+            <input id="book-editora" required placeholder="Ex: Alta Books" />
+          </div>
+          <div class="field">
+            <label for="book-isbn">ISBN</label>
+            <input id="book-isbn" required placeholder="978-8550804606" />
+          </div>
+          <div class="field">
+            <label for="book-ano">Ano de Publicação</label>
+            <input
+              id="book-ano"
+              type="number"
+              min="1450"
+              max="2030"
+              required
+              placeholder="2019"
+            />
+          </div>
+          <div class="field">
+            <label for="book-categoria">Categoria</label>
+            <input
+              id="book-categoria"
+              required
+              placeholder="Ex: Engenharia de Software"
+              list="categories-datalist"
+            />
+            <datalist id="categories-datalist">
+              <option value="Literatura Clássica"></option>
+              <option value="Literatura Brasileira"></option>
+              <option value="Ficção Científica"></option>
+              <option value="Ficção Clássica"></option>
+              <option value="História"></option>
+              <option value="Engenharia de Software"></option>
+              <option value="Tecnologia"></option>
+            </datalist>
+          </div>
+          <div class="field">
+            <label for="book-qtd">Quantidade Total de Exemplares</label>
+            <input id="book-qtd" type="number" min="1" required value="5" />
+          </div>
+          <div class="field span-2">
+            <label for="book-cor">Cor da capa (miniatura visual)</label>
+            <div class="color-swatches" id="book-color-swatches">
+              <button
+                type="button"
+                class="swatch active"
+                data-color="#2C3639"
+                style="background: #2c3639"
+                title="Charcoal"
+              ></button>
+              <button
+                type="button"
+                class="swatch"
+                data-color="#3F4E4F"
+                style="background: #3f4e4f"
+                title="Slate"
+              ></button>
+              <button
+                type="button"
+                class="swatch"
+                data-color="#A27B5C"
+                style="background: #a27b5c"
+                title="Bronze"
+              ></button>
+              <button
+                type="button"
+                class="swatch"
+                data-color="#7B3F3F"
+                style="background: #7b3f3f"
+                title="Bordô"
+              ></button>
+              <button
+                type="button"
+                class="swatch"
+                data-color="#355E4B"
+                style="background: #355e4b"
+                title="Musgo"
+              ></button>
+              <button
+                type="button"
+                class="swatch"
+                data-color="#8C6749"
+                style="background: #8c6749"
+                title="Carvalho"
+              ></button>
+            </div>
+            <input type="hidden" id="book-cor" value="#2C3639" />
+          </div>
+        </div>
+        <div class="dialog-foot">
+          <button type="button" class="btn btn-ghost" data-close-dialog>
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary">Salvar Livro</button>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- Modal: Gerenciar Condição de Exemplares (UC15) -->
+    <dialog id="modal-condition" class="sx-dialog">
+      <form id="form-condition" class="dialog-card" method="dialog">
+        <div class="dialog-head">
+          <div>
+            <span class="eyebrow">UC15 • Condição de Exemplares</span>
+            <h3>Gerenciar Exemplares Danificados</h3>
+          </div>
+          <button type="button" class="dialog-close" data-close-dialog>
+            &times;
+          </button>
+        </div>
+        <div class="dialog-body stack-form">
+          <input type="hidden" id="cond-book-id" />
+          <div id="cond-book-summary" class="summary-box"></div>
+          <div class="field">
+            <label for="cond-acao">Operação</label>
+            <select id="cond-acao" required>
+              <option value="MARCAR_DANIFICADO">
+                Separar exemplar(es) disponível(is) como Danificado
+              </option>
+              <option value="REPARAR_DISPONIBILIZAR">
+                Após reparo/avaliação, recolocar como Disponível
+              </option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="cond-qtd">Quantidade de exemplares</label>
+            <input id="cond-qtd" type="number" min="1" value="1" required />
+          </div>
+          <div class="field">
+            <label for="cond-obs">Observação / Laudo</label>
+            <textarea
+              id="cond-obs"
+              rows="3"
+              required
+              placeholder="Descreva a avaria encontrada ou o reparo concluído..."
+            ></textarea>
+          </div>
+        </div>
+        <div class="dialog-foot">
+          <button type="button" class="btn btn-ghost" data-close-dialog>
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary">
+            Registrar Alteração
+          </button>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- Modal: Cadastrar / Editar Leitor (UC02, UC03) -->
+    <dialog id="modal-reader" class="sx-dialog">
+      <form id="form-reader" class="dialog-card" method="dialog">
+        <div class="dialog-head">
+          <div>
+            <span class="eyebrow">UC02 / UC03 • Leitores</span>
+            <h3 id="modal-reader-title">Cadastrar Leitor</h3>
+          </div>
+          <button type="button" class="dialog-close" data-close-dialog>
+            &times;
+          </button>
+        </div>
+        <div class="dialog-body form-grid-2">
+          <input type="hidden" id="reader-id" />
+          <div class="field span-2">
+            <label for="reader-nome">Nome completo</label>
+            <input id="reader-nome" required placeholder="Ex: Mariana Silva" />
+          </div>
+          <div class="field">
+            <label for="reader-cpf">CPF</label>
+            <input
+              id="reader-cpf"
+              required
+              placeholder="000.000.000-00"
+              maxlength="14"
+            />
+          </div>
+          <div class="field">
+            <label for="reader-perfil">Perfil do Leitor</label>
+            <select id="reader-perfil">
+              <option value="Aluno">Aluno</option>
+              <option value="Professor">Professor</option>
+              <option value="Pesquisador">Pesquisador</option>
+              <option value="Comunidade">Comunidade</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="reader-telefone">Telefone</label>
+            <input
+              id="reader-telefone"
+              required
+              placeholder="(11) 98765-4321"
+            />
+          </div>
+          <div class="field">
+            <label for="reader-email">E-mail</label>
+            <input
+              id="reader-email"
+              type="email"
+              required
+              placeholder="leitor@email.com"
+            />
+          </div>
+          <div class="field span-2">
+            <label for="reader-endereco">Endereço completo</label>
+            <input
+              id="reader-endereco"
+              required
+              placeholder="Rua, número, bairro"
+            />
+          </div>
+        </div>
+        <div class="dialog-foot">
+          <button type="button" class="btn btn-ghost" data-close-dialog>
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary">Salvar Leitor</button>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- Modal: Histórico de Empréstimos do Leitor (UC14) -->
+    <dialog id="modal-reader-history" class="sx-dialog sx-dialog-wide">
+      <div class="dialog-card">
+        <div class="dialog-head">
+          <div>
+            <span class="eyebrow">UC14 • Histórico do Leitor</span>
+            <h3 id="history-reader-name">Histórico de Empréstimos</h3>
+          </div>
+          <button type="button" class="dialog-close" data-close-dialog>
+            &times;
+          </button>
+        </div>
+        <div class="dialog-body">
+          <div id="history-reader-meta" class="summary-box"></div>
+          <div class="table-responsive" style="margin-top: 14px">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Código / Livro</th>
+                  <th>Empréstimo</th>
+                  <th>Prevista / Devolução</th>
+                  <th>Condição</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="history-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="dialog-foot">
+          <button type="button" class="btn btn-primary" data-close-dialog>
+            Fechar
+          </button>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- Modal: Cadastrar / Editar Funcionário (UC16) -->
+    <dialog id="modal-staff" class="sx-dialog">
+      <form id="form-staff" class="dialog-card" method="dialog">
+        <div class="dialog-head">
+          <div>
+            <span class="eyebrow">UC16 • Administração</span>
+            <h3 id="modal-staff-title">Cadastrar Funcionário</h3>
+          </div>
+          <button type="button" class="dialog-close" data-close-dialog>
+            &times;
+          </button>
+        </div>
+        <div class="dialog-body form-grid-2">
+          <input type="hidden" id="staff-id" />
+          <div class="field span-2">
+            <label for="staff-nome">Nome completo</label>
+            <input
+              id="staff-nome"
+              required
+              placeholder="Ex: Henrique Ferreira"
+            />
+          </div>
+          <div class="field">
+            <label for="staff-matricula">Matrícula</label>
+            <input id="staff-matricula" required placeholder="FUN-103" />
+          </div>
+          <div class="field">
+            <label for="staff-cargo">Perfil de Acesso (RBAC)</label>
+            <select id="staff-cargo" required>
+              <option value="FUNCIONARIO">Funcionário</option>
+              <option value="ADMINISTRADOR">Administrador</option>
+              <option value="VISUALIZADOR">Somente Visualização</option>
+            </select>
+          </div>
+          <div class="field span-2">
+            <label for="staff-email">E-mail de acesso</label>
+            <input
+              id="staff-email"
+              type="email"
+              required
+              placeholder="nome@systemx.com"
+            />
+          </div>
+          <div class="field span-2">
+            <label for="staff-senha"
+              >Senha
+              <small id="staff-senha-hint">(mínimo 6 caracteres)</small></label
+            >
+            <input
+              id="staff-senha"
+              type="password"
+              placeholder="Digite a senha"
+            />
+          </div>
+        </div>
+        <div class="dialog-foot">
+          <button type="button" class="btn btn-ghost" data-close-dialog>
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary">Salvar Conta</button>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- Container de Toasts -->
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+    <script src="./js/app.js"></script>
+  </body>
+</html>
